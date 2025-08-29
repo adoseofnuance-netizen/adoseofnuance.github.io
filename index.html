@@ -51,16 +51,40 @@
     return () => observer.disconnect();
   }, [currentPage]);
 
+  // UPDATED: Responsive Navigation Bar (navigation only changed; rest unchanged)
   const NavigationBar = () => (
     <nav className="fixed top-0 w-full z-50 shadow-lg transition-all duration-300" style={{ background: 'linear-gradient(to right, #0f172a, #064e3b)' }}>
       <div className="max-w-6xl mx-auto px-6 py-4">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="text-2xl font-light tracking-wide transition-colors duration-300 hover:text-white" style={{ color: '#d1fae5' }}>
             Devon Andrews
           </div>
-          
+
+          {/* Mobile menu toggle */}
+          <button
+            aria-label="Toggle navigation menu"
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-emerald-500"
+            style={{ color: '#a7f3d0', backgroundColor: 'rgba(6, 95, 70, 0.35)' }}
+            onClick={() => setIsMenuOpen(o => !o)}
+          >
+            {/* Hamburger / Close icon */}
+            <svg
+              className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? 'transform rotate-90' : ''}`}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
           {/* Desktop Navigation */}
-          <div className="flex space-x-8">
+          <div className="hidden md:flex md:space-x-4 lg:space-x-8">
             {[
               { id: 'home', label: 'Home' },
               { id: 'modality', label: 'Therapeutic Modality' },
@@ -68,11 +92,39 @@
             ].map(item => (
               <button
                 key={item.id}
-                onClick={() => setCurrentPage(item.id)}
-                className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+                onClick={() => { setCurrentPage(item.id); setIsMenuOpen(false); }}
+                className={`px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 whitespace-nowrap ${
                   currentPage === item.id 
                     ? 'text-white shadow-md' 
                     : 'hover:text-white'
+                }`}
+                style={
+                  currentPage === item.id
+                    ? { backgroundColor: '#047857', color: '#ffffff' }
+                    : { color: '#a7f3d0', backgroundColor: 'rgba(6, 95, 70, 0.5)' }
+                }
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-96 mt-3' : 'max-h-0'}`}>
+          <div className="flex flex-col space-y-2 py-2">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'modality', label: 'Therapeutic Modality' },
+              { id: 'contact', label: 'Contact' }
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => { setCurrentPage(item.id); setIsMenuOpen(false); }}
+                className={`text-left px-4 py-3 rounded-lg transition-all duration-300 ${
+                  currentPage === item.id 
+                    ? 'text-white shadow-md' 
+                    : ''
                 }`}
                 style={
                   currentPage === item.id
