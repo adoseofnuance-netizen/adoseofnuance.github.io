@@ -51,6 +51,16 @@
     return () => observer.disconnect();
   }, [currentPage]);
 
+  // Helper: safe navigation setter to avoid blank page on re-click/close
+  const navigateTo = (pageId) => {
+    // Always close the menu first to avoid layout glitches
+    setIsMenuOpen(false);
+    // Only change page if different — prevents re-render blip on same-page click
+    if (pageId !== currentPage) {
+      setCurrentPage(pageId);
+    }
+  };
+
   // UPDATED: Responsive Navigation Bar (navigation only changed; rest unchanged)
   const NavigationBar = () => (
     <nav className="fixed top-0 w-full z-50 shadow-lg transition-all duration-300" style={{ background: 'linear-gradient(to right, #0f172a, #064e3b)' }}>
@@ -92,7 +102,7 @@
             ].map(item => (
               <button
                 key={item.id}
-                onClick={() => { setCurrentPage(item.id); setIsMenuOpen(false); }}
+                onClick={() => navigateTo(item.id)}
                 className={`px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 whitespace-nowrap ${
                   currentPage === item.id 
                     ? 'text-white shadow-md' 
@@ -120,7 +130,7 @@
             ].map(item => (
               <button
                 key={item.id}
-                onClick={() => { setCurrentPage(item.id); setIsMenuOpen(false); }}
+                onClick={() => navigateTo(item.id)}
                 className={`text-left px-4 py-3 rounded-lg transition-all duration-300 ${
                   currentPage === item.id 
                     ? 'text-white shadow-md' 
