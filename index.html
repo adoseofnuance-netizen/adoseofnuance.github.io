@@ -1,0 +1,566 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Optional: basic styles -->
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React and Babel in the browser (simple, but slower) -->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Your JSX goes here -->
+    <script type="text/babel">
+      // Example:
+      function App() {
+  const [currentPage, setCurrentPage] = React.useState('home');
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const profileImageUrl = "https://cdn.abacus.ai/images/bf2ff577-3222-49a3-9660-74c9f53d5529.png";
+
+  // Scroll to top when page changes
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  // Intersection Observer for scroll animations
+  React.useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements with scroll-animate class
+    const animateElements = document.querySelectorAll('.scroll-animate');
+    animateElements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [currentPage]);
+
+  const NavigationBar = () => (
+    <nav className="fixed top-0 w-full z-50 shadow-lg transition-all duration-300" style={{ background: 'linear-gradient(to right, #0f172a, #064e3b)' }}>
+      <div className="max-w-6xl mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          <div className="text-2xl font-light tracking-wide transition-colors duration-300 hover:text-white" style={{ color: '#d1fae5' }}>
+            Devon Andrews
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="flex space-x-8">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'modality', label: 'Therapeutic Modality' },
+              { id: 'contact', label: 'Contact' }
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => setCurrentPage(item.id)}
+                className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+                  currentPage === item.id 
+                    ? 'text-white shadow-md' 
+                    : 'hover:text-white'
+                }`}
+                style={
+                  currentPage === item.id
+                    ? { backgroundColor: '#047857', color: '#ffffff' }
+                    : { color: '#a7f3d0', backgroundColor: 'rgba(6, 95, 70, 0.5)' }
+                }
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+
+  const HomePage = () => (
+    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #fafaf9, #ecfdf5, #f1f5f9)' }}>
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8 scroll-animate">
+              <h1 className="text-5xl md:text-6xl font-light leading-tight" style={{ color: '#1e293b' }}>
+                Walking Your Own 
+                <span className="block" style={{ color: '#047857' }}>Unique Path</span>
+              </h1>
+              <div className="w-24 h-1" style={{ background: 'linear-gradient(to right, #059669, #0d9488)' }}></div>
+              <p className="text-xl leading-relaxed" style={{ color: '#475569' }}>
+                Welcome.
+              </p>
+              <p className="text-lg leading-relaxed" style={{ color: '#334155' }}>
+                If a crisis, rupture, or awakening has unsettled the familiar coordinates of your life—and you feel a real pull to change—this space is for you. You sense there's more to your life than inherited scripts, yet the next step isn't obvious. Together, we'll slow down, listen closely, and let what's true emerge at its own pace.
+              </p>
+            </div>
+            <div className="flex justify-center scroll-animate">
+              <div className="relative">
+                <div className="absolute inset-0 rounded-full blur-3xl animate-pulse" style={{ background: 'linear-gradient(to bottom right, rgba(52, 211, 153, 0.2), rgba(45, 212, 191, 0.2))' }}></div>
+                <img 
+                  src={profileImageUrl}
+                  alt="Devon Andrews - Therapist"
+                  className="relative w-80 h-80 object-cover rounded-full shadow-2xl border-4 transition-transform duration-500 hover:scale-105"
+                  style={{ borderColor: '#ffffff' }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Who I Work With */}
+      <section className="py-16 px-6 backdrop-blur-sm scroll-animate" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-light mb-8 text-center" style={{ color: '#1e293b' }}>Who I Work With</h2>
+          <p className="text-lg mb-6" style={{ color: '#334155' }}>I work best with people who are:</p>
+          <ul className="space-y-4" style={{ color: '#334155' }}>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0 transition-colors duration-300" style={{ backgroundColor: '#059669' }}></div>
+              Moving through identity questions, value shifts, or existential crossroads.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0 transition-colors duration-300" style={{ backgroundColor: '#059669' }}></div>
+              Integrating spiritual, psychedelic, or other transformative experiences.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0 transition-colors duration-300" style={{ backgroundColor: '#059669' }}></div>
+              Feeling misaligned with old roles and expectations, and wanting to live from a truer center.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0 transition-colors duration-300" style={{ backgroundColor: '#059669' }}></div>
+              Curious about dreams, symbols, and unconscious patterns.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0 transition-colors duration-300" style={{ backgroundColor: '#059669' }}></div>
+              Ready to step into agency and responsibility in a grounded, realistic way.
+            </li>
+          </ul>
+          <div className="mt-8 p-6 rounded-lg border-l-4 transition-all duration-300 hover:shadow-lg scroll-animate" style={{ background: 'linear-gradient(to right, #fffbeb, #fff7ed)', borderLeftColor: '#f59e0b' }}>
+            <p style={{ color: '#334155' }}>
+              This practice is not designed for acute crises requiring higher levels of care, or for severe, ongoing conditions such as severe depression or complex personality disorders. If that's what you're navigating, I'm happy to offer referrals to more appropriate supports.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How I Work */}
+      <section className="py-16 px-6 scroll-animate" style={{ background: 'linear-gradient(to bottom right, #ecfdf5, #f0fdfa)' }}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-light mb-8 text-center" style={{ color: '#1e293b' }}>How I Work</h2>
+          <p className="text-lg mb-8 text-center max-w-3xl mx-auto" style={{ color: '#334155' }}>
+            I don't position myself as the expert on your life. I offer a steady, reflective relationship where your own meanings can take shape. The work is open-ended and collaborative; it does not rely on quick fixes or one-size-fits-all techniques.
+          </p>
+          
+          <h3 className="text-2xl font-light mb-6 text-center" style={{ color: '#1e293b' }}>Core orientations:</h3>
+          <div className="space-y-6">
+            <div className="p-6 rounded-lg shadow-sm border-l-4 transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.8)', borderLeftColor: '#059669' }}>
+              <h4 className="font-medium mb-3" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#047857' }}>The truth of desire:</span>
+              </h4>
+              <p style={{ color: '#334155' }}>
+                There is no single, true, sense of self. The self is always in motion – it is in constant change. To be true to yourself, or to be in touch with yourself, is simply to be in touch with your desires, your spontaneity, your creativity. It is to be in touch with the uncomfortable emotions that are trying to guide you towards a life that is more aligned with your desires. This is what we will seek to bring out in you – your desires, your truth, and the messages encoded in your discomfort, dreams, and emotions.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
+                <h4 className="font-medium mb-3" style={{ color: '#047857' }}>Depth with clarity:</h4>
+                <p style={{ color: '#334155' }}>We attend to deep unconscious material in a personal, understandable way</p>
+              </div>
+              <div className="p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
+                <h4 className="font-medium mb-3" style={{ color: '#047857' }}>Agency over adherence:</h4>
+                <p style={{ color: '#334155' }}>We look for what is genuinely yours, not what you've adopted to belong. We differentiate between your personal desires and the demands of society.</p>
+              </div>
+              <div className="p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
+                <h4 className="font-medium mb-3" style={{ color: '#047857' }}>Pace with precision:</h4>
+                <p style={{ color: '#334155' }}>We move thoughtfully, allowing insights to become livable.</p>
+              </div>
+              <div className="p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
+                <h4 className="font-medium mb-3" style={{ color: '#047857' }}>Integration:</h4>
+                <p style={{ color: '#334155' }}>Bringing insights—psychedelic or otherwise—into daily rhythms and commitments.</p>
+              </div>
+            </div>
+            
+            <div className="p-6 rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
+              <h4 className="font-medium mb-3" style={{ color: '#047857' }}>Power and authority:</h4>
+              <p style={{ color: '#334155' }}>We examine your relationship to your own power, as well as authority</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What This Work Is */}
+      <section className="py-16 px-6 backdrop-blur-sm scroll-animate" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-light mb-8 text-center" style={{ color: '#1e293b' }}>What This Work Is (and Isn't)</h2>
+          <p className="text-lg mb-6" style={{ color: '#334155' }}>
+            Rather than pathologizing your struggle or prescribing behavioral solutions, we ask what your symptoms, dreams, and conflicts might be pointing toward.
+          </p>
+          <p className="mb-8" style={{ color: '#334155' }}>
+            No promises are made here about outcomes or timelines. Ideally, you would find self-understanding, more congruent choices, and steadier contact with your own authority—but the shape of that is personal and can't be guaranteed. Any promise of specific outcomes from a therapist to a client is unethical and a conflict of interest – the outcome of a therapy process reflects your unique individuality, not a therapist's promises.
+          </p>
+          
+          <div className="p-6 rounded-lg border-l-4 transition-all duration-300 hover:shadow-lg scroll-animate" style={{ background: 'linear-gradient(to right, #f8fafc, #ecfdf5)', borderLeftColor: '#059669' }}>
+            <h3 className="text-xl font-light mb-4" style={{ color: '#1e293b' }}>About My Training</h3>
+            <p style={{ color: '#334155' }}>
+              I am completing a Master's in Clinical Psychology and am in the final stages of my thesis. I am not yet a licensed therapist. I work with ongoing supervision and within clear ethical boundaries. When needs fall outside my scope, I refer to licensed clinicians.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Is This a Good Fit */}
+      <section className="py-16 px-6 scroll-animate" style={{ background: 'linear-gradient(to bottom right, #ecfdf5, #f0fdfa)' }}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-light mb-8 text-center" style={{ color: '#1e293b' }}>Is This a Good Fit?</h2>
+          <p className="text-lg mb-6" style={{ color: '#334155' }}>This may be for you if you:</p>
+          <ul className="space-y-4 mb-8" style={{ color: '#334155' }}>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Are drawn to depth over speed.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Want to work at the level of roots, not only symptoms.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Are ready to engage your own authority, not outsource it.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Have had an experience—a rupture, initiation, or reckoning—that now asks for integration and direction.
+            </li>
+          </ul>
+          <p className="mb-8" style={{ color: '#334155' }}>
+            If this resonates, you're welcome to reach out for a brief consultation. We can discern together whether this work and timing feel right.
+          </p>
+          
+          <blockquote className="text-xl italic text-center border-l-4 pl-6 rounded-lg transition-all duration-300 hover:shadow-lg scroll-animate" style={{ color: '#475569', borderLeftColor: '#059669', backgroundColor: 'rgba(255,255,255,0.8)' }}>
+            "The privilege of a lifetime is to become who you truly are." — C.G. Jung
+          </blockquote>
+        </div>
+      </section>
+    </div>
+  );
+
+  const ModalityPage = () => (
+    <div className="min-h-screen pt-24" style={{ background: 'linear-gradient(to bottom right, #fafaf9, #ecfdf5, #f1f5f9)' }}>
+      {/* Hero Section */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto scroll-animate">
+          <h1 className="text-4xl md:text-5xl font-light mb-8" style={{ color: '#1e293b' }}>
+            The Moment We Lost 
+            <span className="block" style={{ color: '#047857' }}>Ourselves</span>
+          </h1>
+          <div className="w-24 h-1 mb-8" style={{ background: 'linear-gradient(to right, #059669, #0d9488)' }}></div>
+          
+          <div className="space-y-6 text-lg leading-relaxed" style={{ color: '#334155' }}>
+            <p className="scroll-animate">
+              When we are children, we rely completely on our parents for our survival. Part of that surviving is being loved by an Other. It is for this reason that we learn what significant others demand of us, and begin to force ourselves into these boxes. Our own authentic desires are suppressed and replaced with the demands of the Other, and so we begin to lose our own authenticity. What we think we want, is actually what our parents wanted from us – our desires have a "should" attached. I should want this, I should be that.
+            </p>
+            <p className="scroll-animate">
+              We are forced into the norms, customs, laws, and demands of society. Society demands that we conform, that we be what it wants of us.
+            </p>
+            <p className="font-medium text-center text-xl scroll-animate" style={{ color: '#047857' }}>
+              But inside, a voice quietly speaks out in protest.
+            </p>
+            <p className="scroll-animate">
+              The parts of us that we pushed down do not disappear. They continuously rise. In the form of symptoms – the fog of depression, a perpetual anxiety. They come out in metaphors, hidden in our dreams every night. These parts yearn to guide us towards a more aligned life.
+            </p>
+            <p className="scroll-animate">
+              These authentic desires that we have repressed yearn to come to the surface again.
+            </p>
+            <p className="scroll-animate">
+              Living a purposeful, meaningful life means tuning into these desires. It means holding difficult emotions and understanding what they are trying to teach us. It means honouring our internal conflicts. It means creating enough safety in our lives that we can step into uncertainty and face our fears. It means asking what safety, control, or certainty our symptoms give us, thanking them for giving us this, and then letting go of them.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Modalities Section */}
+      <section className="py-16 px-6 backdrop-blur-sm" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-light mb-12 text-center scroll-animate" style={{ color: '#1e293b' }}>Modalities and Focus Areas</h2>
+          
+          <div className="space-y-12">
+            {/* Psychodynamic */}
+            <div className="p-8 rounded-lg shadow-sm border-l-4 transition-all duration-500 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.9)', borderLeftColor: '#059669' }}>
+              <h3 className="text-2xl font-light mb-6" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#047857' }}>Psychodynamic foundations</span>
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="transition-all duration-300 hover:translate-x-2">
+                  <h4 className="font-medium mb-3" style={{ color: '#1e293b' }}>Unconscious process:</h4>
+                  <p style={{ color: '#334155' }}>How past experiences and hidden patterns shape the present.</p>
+                </div>
+                <div className="transition-all duration-300 hover:translate-x-2">
+                  <h4 className="font-medium mb-3" style={{ color: '#1e293b' }}>Relational dynamics:</h4>
+                  <p style={{ color: '#334155' }}>How early relationship templates replay—and how they can shift.</p>
+                </div>
+                <div className="transition-all duration-300 hover:translate-x-2">
+                  <h4 className="font-medium mb-3" style={{ color: '#1e293b' }}>Defenses:</h4>
+                  <p style={{ color: '#334155' }}>Noticing protective strategies without shaming them. Honoring internal conflicts and the wisdom behind difficult emotions</p>
+                </div>
+                <div className="transition-all duration-300 hover:translate-x-2">
+                  <h4 className="font-medium mb-3" style={{ color: '#1e293b' }}>Transference/countertransference:</h4>
+                  <p style={{ color: '#334155' }}>Using our relationship as a live source of insight.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Existential */}
+            <div className="p-8 rounded-lg shadow-sm border-l-4 transition-all duration-500 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.9)', borderLeftColor: '#0d9488' }}>
+              <h3 className="text-2xl font-light mb-6" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#0f766e' }}>Existential and identity work</span>
+              </h3>
+              <ul className="space-y-3" style={{ color: '#334155' }}>
+                <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                  <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#0d9488' }}></div>
+                  Meaning-making during transitions and crises.
+                </li>
+                <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                  <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#0d9488' }}></div>
+                  Clarifying commitments that feel aligned and meaningful.
+                </li>
+              </ul>
+            </div>
+
+            {/* Psychedelic */}
+            <div className="p-8 rounded-lg shadow-sm border-l-4 transition-all duration-500 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.9)', borderLeftColor: '#059669' }}>
+              <h3 className="text-2xl font-light mb-6" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#047857' }}>Psychedelic preparation and integration</span>
+              </h3>
+              <div className="space-y-4">
+                <div className="transition-all duration-300 hover:translate-x-2">
+                  <h4 className="font-medium mb-2" style={{ color: '#1e293b' }}>Before:</h4>
+                  <p style={{ color: '#334155' }}>Intention, readiness, and support.</p>
+                </div>
+                <div className="transition-all duration-300 hover:translate-x-2">
+                  <h4 className="font-medium mb-2" style={{ color: '#1e293b' }}>After:</h4>
+                  <p style={{ color: '#334155' }}>Making sense of challenging or insightful material, interpreting symbols, visions, and experiences. Integrating insights into daily practice</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Dream Work */}
+            <div className="p-8 rounded-lg shadow-sm border-l-4 transition-all duration-500 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.9)', borderLeftColor: '#0d9488' }}>
+              <h3 className="text-2xl font-light mb-6" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#0f766e' }}>Dream work and symbol</span>
+              </h3>
+              <ul className="space-y-3" style={{ color: '#334155' }}>
+                <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                  <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#0d9488' }}></div>
+                  Understanding the symbolic whisperings and wisdom of your unconscious via dream interpretation
+                </li>
+                <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                  <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#0d9488' }}></div>
+                  Identifying patterns in dream life and attempting to unpack them
+                </li>
+              </ul>
+            </div>
+
+            {/* Somatic */}
+            <div className="p-8 rounded-lg shadow-sm border-l-4 transition-all duration-500 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.9)', borderLeftColor: '#059669' }}>
+              <h3 className="text-2xl font-light mb-6" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#047857' }}>Somatic attention</span>
+              </h3>
+              <ul className="space-y-3" style={{ color: '#334155' }}>
+                <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                  <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+                  Simple, respectful attention to how emotion plays out in your body.
+                </li>
+                <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                  <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+                  Working with psychosomatic symptoms – giving the body a voice
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What to Expect */}
+      <section className="py-16 px-6 scroll-animate" style={{ background: 'linear-gradient(to bottom right, #ecfdf5, #f0fdfa)' }}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-light mb-12 text-center" style={{ color: '#1e293b' }}>What to Expect</h2>
+          
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #ecfdf5)' }}>
+              <h3 className="text-xl font-light mb-4" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#047857' }}>My role</span>
+              </h3>
+              <ul className="space-y-3" style={{ color: '#334155' }}>
+                <li><strong>Mirror:</strong> Reflecting patterns and possibilities without prescription.</li>
+                <li><strong>Witness:</strong> Holding and containing what comes up, witnessing your rawness and vulnerability with care and compassion</li>
+                <li><strong>Companion:</strong> Helping you walk the path you choose with increasing coherence.</li>
+              </ul>
+            </div>
+            
+            <div className="p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:translate-y-1 scroll-animate" style={{ background: 'linear-gradient(to bottom right, #ecfdf5, #f0fdfa)' }}>
+              <h3 className="text-xl font-light mb-4" style={{ color: '#1e293b' }}>
+                <span style={{ color: '#0f766e' }}>Your role</span>
+              </h3>
+              <ul className="space-y-3" style={{ color: '#334155' }}>
+                <li>Bring curiosity and a willingness to be surprised by yourself.</li>
+                <li>Experiment with speaking with complete honesty, even when it scares you or seems to complicate things.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="p-8 rounded-lg shadow-sm border-l-4 mb-8 transition-all duration-300 hover:shadow-lg scroll-animate" style={{ backgroundColor: 'rgba(255,255,255,0.9)', borderLeftColor: '#059669' }}>
+            <h3 className="text-xl font-light mb-4" style={{ color: '#1e293b' }}>Ethics and scope</h3>
+            <ul className="space-y-3" style={{ color: '#334155' }}>
+              <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+                I aim to be transparent about my training status and limitations.
+              </li>
+              <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+                Supervision and consultation are part of my practice.
+              </li>
+              <li className="flex items-start transition-all duration-300 hover:translate-x-2">
+                <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+                I will refer you if specialized care is needed.
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-6 rounded-lg border-l-4 mb-8 transition-all duration-300 hover:shadow-lg scroll-animate" style={{ background: 'linear-gradient(to right, #f8fafc, #ecfdf5)', borderLeftColor: '#059669' }}>
+            <h3 className="text-xl font-light mb-4" style={{ color: '#1e293b' }}>About My Training</h3>
+            <p style={{ color: '#334155' }}>
+              I am completing a Master's in Clinical Psychology and am in the final stages of my thesis. I am not yet a licensed therapist. I work with ongoing supervision and within clear ethical boundaries. When needs fall outside my scope, I refer to licensed clinicians.
+            </p>
+          </div>
+
+          <h2 className="text-3xl font-light mb-8 text-center" style={{ color: '#1e293b' }}>Is This a Good Fit?</h2>
+          <p className="text-lg mb-6" style={{ color: '#334155' }}>This may be for you if you:</p>
+          <ul className="space-y-4 mb-8" style={{ color: '#334155' }}>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Are drawn to depth over speed.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Want to work at the level of roots, not only symptoms.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Are ready to engage your own authority, not outsource it.
+            </li>
+            <li className="flex items-start transition-all duration-300 hover:translate-x-2 scroll-animate">
+              <div className="w-3 h-3 rounded-full mt-2 mr-4 flex-shrink-0" style={{ backgroundColor: '#059669' }}></div>
+              Have had an experience—a rupture, initiation, or reckoning—that now asks for integration and direction.
+            </li>
+          </ul>
+          
+          <p className="mb-8" style={{ color: '#334155' }}>
+            If this resonates, you're welcome to reach out for a brief consultation. We can discern together whether this work and timing feel right.
+          </p>
+          
+          <blockquote className="text-xl italic text-center border-l-4 pl-6 rounded-lg transition-all duration-300 hover:shadow-lg scroll-animate" style={{ color: '#475569', borderLeftColor: '#059669', backgroundColor: 'rgba(255,255,255,0.8)' }}>
+            "The privilege of a lifetime is to become who you truly are." — C.G. Jung
+          </blockquote>
+        </div>
+      </section>
+    </div>
+  );
+
+  const ContactPage = () => (
+    <div className="min-h-screen pt-24" style={{ background: 'linear-gradient(to bottom right, #fafaf9, #ecfdf5, #f1f5f9)' }}>
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto text-center scroll-animate">
+          <h1 className="text-4xl md:text-5xl font-light mb-8" style={{ color: '#1e293b' }}>
+            <span style={{ color: '#047857' }}>Contact</span>
+          </h1>
+          <div className="w-24 h-1 mx-auto mb-12" style={{ background: 'linear-gradient(to right, #059669, #0d9488)' }}></div>
+          
+          <div className="p-12 rounded-lg shadow-lg max-w-2xl mx-auto transition-all duration-500 hover:shadow-xl hover:translate-y-1" style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}>
+            <div className="space-y-8 text-lg" style={{ color: '#334155' }}>
+              <p className="scroll-animate">
+                To schedule an initial appointment, please send an email to{' '}
+                <a 
+                  href="mailto:adoseofnuance@gmail.com" 
+                  className="font-medium transition-all duration-300 hover:underline"
+                  style={{ color: '#047857' }}
+                  onMouseOver={e => e.currentTarget.style.color = '#065f46'}
+                  onMouseOut={e => e.currentTarget.style.color = '#047857'}
+                >
+                  adoseofnuance@gmail.com
+                </a>
+              </p>
+              
+              <p className="scroll-animate">
+                You can include a brief description of yourself, and what you are struggling with or looking for right now.
+              </p>
+              
+              <div className="p-6 rounded-lg border-l-4 transition-all duration-300 hover:shadow-lg scroll-animate" style={{ background: 'linear-gradient(to right, #fffbeb, #fff7ed)', borderLeftColor: '#f59e0b' }}>
+                <p className="font-medium mb-2" style={{ color: '#1e293b' }}>Please note:</p>
+                <p>
+                  Right now (as of 28th August 2025) I am currently on vacation and will likely only be accepting clients in October 2025.
+                </p>
+              </div>
+              
+              <p className="text-xl font-light scroll-animate" style={{ color: '#047857' }}>
+                I look forward to working with you!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen">
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scroll-animate {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.6s ease;
+        }
+        
+        .scroll-animate.animate-in {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        .animate-slideDown { animation: slideDown 0.3s ease-out; }
+      `}</style>
+      
+      <NavigationBar />
+      
+      {currentPage === 'home' && <HomePage />}
+      {currentPage === 'modality' && <ModalityPage />}
+      {currentPage === 'contact' && <ContactPage />}
+    </div>
+  );
+}
+      ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+  </body>
+</html>
